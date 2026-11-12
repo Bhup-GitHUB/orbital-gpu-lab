@@ -6,6 +6,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"strconv"
 
 	"orbital-gpu-lab/internal/data"
 	"orbital-gpu-lab/internal/fault"
@@ -37,7 +38,8 @@ func main() {
 	fmt.Printf("Example weight: %g; bit 0: %g; bit 30: %g\n", value, fault.Flip(value, 0), fault.Flip(value, 30))
 	rows := make([]report.BitResult, 0, 32)
 	for bit := 0; bit < 32; bit++ {
-		if *bitChoice != "all" && *bitChoice != fault.Class(bit) && *bitChoice != fmt.Sprint(bit) {
+		selectedBit, parseErr := strconv.Atoi(*bitChoice)
+		if *bitChoice != "all" && *bitChoice != fault.Class(bit) && (parseErr != nil || selectedBit != bit) {
 			continue
 		}
 		row := report.BitResult{Bit: bit, Class: fault.Class(bit)}
